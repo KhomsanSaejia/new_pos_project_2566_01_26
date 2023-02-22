@@ -62,13 +62,15 @@ class MyObject {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 1,
       // height: MediaQuery.of(context).size.height * 0.1,
-      child: const Padding(
-        padding: EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
         child: Center(
           child: Text(
             "2023 Copyright INA. All Rights Reserved. version 0.1",
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontFamily: "Sarabun"),
+            style: GoogleFonts.sarabun(
+              color: Colors.white,
+              fontSize: 20,
+            ),
           ),
         ),
       ),
@@ -93,8 +95,10 @@ class MyObject {
         title: Center(
           child: Text(
             header,
-            style: const TextStyle(
-                fontFamily: "Sarabun", fontSize: 20, color: Colors.black),
+            style: GoogleFonts.sarabun(
+              color: Colors.black,
+              fontSize: 20,
+            ),
           ),
         ),
         children: <Widget>[
@@ -111,16 +115,20 @@ class MyObject {
                 },
                 child: Text(
                   confirm,
-                  style: const TextStyle(
-                      fontFamily: "Sarabun", fontSize: 15, color: Colors.white),
+                  style: GoogleFonts.sarabun(
+                    color: Colors.white,
+                    fontSize: 15,
+                  ),
                 ),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
                 child: Text(
                   cancel,
-                  style: const TextStyle(
-                      fontFamily: "Sarabun", fontSize: 15, color: Colors.white),
+                  style: GoogleFonts.sarabun(
+                    color: Colors.white,
+                    fontSize: 15,
+                  ),
                 ),
               ),
             ],
