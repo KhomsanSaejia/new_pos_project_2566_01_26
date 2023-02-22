@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../screen/01_screen_login/screen_login.dart';
 
@@ -31,13 +32,27 @@ class MyObject {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
-          Text("ยินดีต้อนรับ",
-              style: TextStyle(
-                  color: Colors.white, fontSize: 50, fontFamily: 'Sarabun')),
-          Text("กรุณาเข้าสู่ระบบ",
-              style: TextStyle(
-                  color: Colors.white, fontSize: 20, fontFamily: 'Sarabun'))
+        children: [
+          Text(
+            "ยินดีต้อนรับ",
+            style: GoogleFonts.sarabun(
+              color: Colors.white,
+              fontSize: 50,
+            ),
+          ),
+          Text(
+            "กรุณาเข้าสู่ระบบ",
+            style: GoogleFonts.sarabun(
+              color: Colors.white,
+              fontSize: 20,
+            ),
+          ),
+          // Text("ยินดีต้อนรับ",
+          //     style: TextStyle(
+          //         color: Colors.white, fontSize: 50, fontFamily: 'Sarabun')),
+          // Text("กรุณาเข้าสู่ระบบ",
+          //     style: TextStyle(
+          //         color: Colors.white, fontSize: 20, fontFamily: 'Sarabun'))
         ],
       ),
     );

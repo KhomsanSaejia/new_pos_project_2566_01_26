@@ -12,7 +12,6 @@ import 'package:new_pos_project_2566_01_26/model/model_shift_meter.dart';
 import 'package:new_pos_project_2566_01_26/model/model_user.dart';
 
 import '../../api/api.dart';
-import '../02_Screen_home/screen_home.dart';
 
 class WebScreenOpenCloseShift extends StatefulWidget {
   final ModelUser modelUser;
@@ -32,8 +31,9 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
   TextEditingController tbChange = TextEditingController();
 
   List<ModelGetmeter> modelGetmeters = [];
-  List<ModelShiftMeter> odelShiftMeters = [];
+  List<ModelShiftMeter> modelShiftMeters = [];
   List<ModelProducts> modelProducts = [];
+  ModelShift? modelShift;
 
   String? _accountDate;
 
@@ -84,15 +84,17 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
   }
 
   Future<void> getshiftdetail() async {
-    ModelShift modelShift =
+    ModelShift _modelShift =
         await API().getDayOpenByDate(accountDate.toString().split(" ")[0]);
     setState(() {
-      tbAccountDate.text = modelShift.dayAccountdate!;
+      modelShift = _modelShift;
+      tbAccountDate.text = _modelShift.dayAccountdate!;
       tbStartShift.text =
-          "${modelShift.shiftStartshift!.split("T")[0]} ${modelShift.shiftStartshift!.split("T")[1]}";
-      tbCashierName.text = modelShift.userFullname!;
-      tbChange.text = modelShift.shiftChange.toString();
-      tbShift.text = modelShift.shiftNo.toString();
+          "${_modelShift.shiftStartshift!.split("T")[0]} ${_modelShift.shiftStartshift!.split("T")[1]}";
+      tbCashierName.text = _modelShift.userFullname!;
+      tbChange.text = _modelShift.shiftChange.toString();
+      tbShift.text = _modelShift.shiftNo.toString();
+      getmetershift();
     });
   }
 
@@ -103,10 +105,17 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
     });
   }
 
+  Future<void> getmetershift() async {
+    List<ModelShiftMeter> resp = await API().getShiftByDate(
+        modelShift!.dayAccountdate!, modelShift!.shiftNo.toString());
+    setState(() {
+      modelShiftMeters.addAll(resp);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-
     checkDay();
     getallproduct();
   }
@@ -122,7 +131,6 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 131, 190, 255),
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _header(context),
@@ -137,9 +145,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.2,
-      // color: const Color.fromARGB(255, 131, 190, 255),
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
@@ -434,7 +440,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
               width: MediaQuery.of(context).size.width,
               child: Row(
@@ -455,7 +461,8 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
                 height: MediaQuery.of(context).size.height * 0.7,
                 width: MediaQuery.of(context).size.width,
                 color: Colors.white,
-                child: showDispenser(context),
+                child:
+                    boolDay ? showDispenser2(context) : showDispenser(context),
               ),
             ),
           ],
@@ -478,7 +485,6 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
                 padding: const EdgeInsets.all(5),
                 height: MediaQuery.of(context).size.height * 0.05,
                 width: MediaQuery.of(context).size.width,
-                // color: Colors.red,
                 alignment: Alignment.centerLeft,
                 child: Text(
                   "ราคาสินค้า",
@@ -487,7 +493,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
                   ),
                 ),
               ),
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.05,
                 width: MediaQuery.of(context).size.width,
                 child: Row(
@@ -573,6 +579,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
   }
 
   Widget showDispenser(BuildContext context) {
+    print("showDispenser = $modelGetmeters");
     return modelGetmeters.isEmpty
         ? Container()
         : ListView.builder(
@@ -613,6 +620,64 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
                       Alignment.centerRight),
                   rowbody(context, 0, 0, "0.00", Alignment.centerRight),
                   rowbody(context, 0, 10, "0.00", Alignment.centerRight),
+                ],
+              );
+            });
+  }
+
+  Widget showDispenser2(BuildContext context) {
+    print("showDispenser2 = $modelShiftMeters");
+    return modelShiftMeters.isEmpty
+        ? Container()
+        : ListView.builder(
+            itemCount: modelShiftMeters.length,
+            itemBuilder: (context, i) {
+              return Row(
+                children: [
+                  rowbody(context, 10, 0, modelShiftMeters[i].id.toString(),
+                      Alignment.center),
+                  rowbody(
+                      context,
+                      0,
+                      0,
+                      modelShiftMeters[i].dispenserId!.toString(),
+                      Alignment.center),
+                  rowbody(
+                      context,
+                      0,
+                      0,
+                      modelShiftMeters[i].dispenserNozzle!.toString(),
+                      Alignment.center),
+                  rowbody(
+                      context,
+                      0,
+                      0,
+                      modelShiftMeters[i].productDescription!,
+                      Alignment.centerLeft),
+                  rowbody(
+                      context,
+                      0,
+                      0,
+                      modelShiftMeters[i].startMeterVolume!.toStringAsFixed(2),
+                      Alignment.centerRight),
+                  rowbody(
+                      context,
+                      0,
+                      0,
+                      modelShiftMeters[i].startMeterAmount!.toStringAsFixed(2),
+                      Alignment.centerRight),
+                  rowbody(
+                      context,
+                      0,
+                      0,
+                      modelShiftMeters[i].endMeterVolume!.toStringAsFixed(2),
+                      Alignment.centerRight),
+                  rowbody(
+                      context,
+                      0,
+                      10,
+                      modelShiftMeters[i].endMeterAmount!.toStringAsFixed(2),
+                      Alignment.centerRight),
                 ],
               );
             });
@@ -751,7 +816,6 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
     if (tbChange.text.isEmpty || tbChange.text == "") {
       EasyLoading.showError("กรุณาระบุเงินทอน");
     } else {
-      
       apiOpenShift();
     }
   }
