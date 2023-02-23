@@ -71,7 +71,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
       setState(() {
         boolDay = true;
         _timer?.cancel();
-        getshiftdetail();
+        getshiftdetail(responseday);
       });
     }
   }
@@ -83,9 +83,9 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
     });
   }
 
-  Future<void> getshiftdetail() async {
+  Future<void> getshiftdetail(String date) async {
     ModelShift _modelShift =
-        await API().getDayOpenByDate(accountDate.toString().split(" ")[0]);
+        await API().getDayOpenByDate(date);
     setState(() {
       modelShift = _modelShift;
       tbAccountDate.text = _modelShift.dayAccountdate!;

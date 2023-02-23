@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:new_pos_project_2566_01_26/model/model_dispenser_status.dart';
 import 'package:new_pos_project_2566_01_26/model/model_getmeter.dart';
 import 'package:new_pos_project_2566_01_26/model/model_products.dart';
 import 'package:new_pos_project_2566_01_26/model/model_shift.dart';
@@ -178,6 +179,8 @@ class API {
     }
     return "null";
   }
+
+  
 
   API();
 }
