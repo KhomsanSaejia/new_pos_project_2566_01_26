@@ -1,6 +1,7 @@
 class ModelProducts {
   int? id;
   String? productCode;
+  String? productShort;
   String? productDescription;
   String? productType;
   double? productPrice;
@@ -10,6 +11,7 @@ class ModelProducts {
   ModelProducts(
       {this.id,
       this.productCode,
+      this.productShort,
       this.productDescription,
       this.productType,
       this.productPrice,
@@ -19,6 +21,7 @@ class ModelProducts {
   ModelProducts.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     productCode = json['product_code'];
+    productShort = json['product_short'];
     productDescription = json['product_description'];
     productType = json['product_type'];
     productPrice = json['product_price'];
@@ -30,6 +33,7 @@ class ModelProducts {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['product_code'] = this.productCode;
+    data['product_short'] = this.productShort;
     data['product_description'] = this.productDescription;
     data['product_type'] = this.productType;
     data['product_price'] = this.productPrice;

@@ -1,13 +1,12 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:new_pos_project_2566_01_26/api/api.dart';
+import 'package:new_pos_project_2566_01_26/api/api_login.dart';
 import 'package:new_pos_project_2566_01_26/screen/02_Screen_home/screen_home_web.dart';
-import '../../model/model_user.dart';
 import '../../utility/style.dart';
 
 class WebScreenLogin extends StatefulWidget {
@@ -37,20 +36,16 @@ class _WebScreenLoginState extends State<WebScreenLogin> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               colors: [
-                // Color.fromARGB(255, 0, 123, 255),
                 Color.fromARGB(255, 131, 190, 255),
                 Color.fromARGB(255, 80, 164, 255),
-                // Color.fromARGB(255, 131, 190, 255),
               ],
             ),
           ),
           child: Column(
             children: [
-              // MyObject().textShowLogin(context),
               MyObject().logo(context),
               MyObject().textShowLogin(context),
-              // row1(),
-              row2(),
+              formlogin(),
               MyObject().textVersion(context),
             ],
           ),
@@ -59,26 +54,9 @@ class _WebScreenLoginState extends State<WebScreenLogin> {
     );
   }
 
-  Widget row1() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.2,
-        width: MediaQuery.of(context).size.width * 0.2,
-        color: Colors.red,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            MyObject().textShowLogin(context),
-            MyObject().logo(context)
-          ],
-        ),
-      ),
-    );
-  }
 
-  Widget row2() {
+
+  Widget formlogin() {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 1,
       height: MediaQuery.of(context).size.height * 0.5,
@@ -191,7 +169,6 @@ class _WebScreenLoginState extends State<WebScreenLogin> {
       padding: const EdgeInsets.all(5),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          // backgroundColor: Colors.green,
           backgroundColor: const Color(0xFF007BFF),
           elevation: 10,
           fixedSize: Size(MediaQuery.of(context).size.width * 0.2,
@@ -200,30 +177,26 @@ class _WebScreenLoginState extends State<WebScreenLogin> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
         onPressed: () async {
-          EasyLoading.show(status: 'loading...');
-          String respUser = await API().login(username!, password!);
-          if (respUser == "null") {
-            EasyLoading.showError('ไม่สามารถเข้าสู่ระบบได้');
-          } else {
-            try {
-              ModelUser modelUser = ModelUser.fromJson(jsonDecode(respUser));
-
-              if (modelUser.respMsg!.userPassword == MyObject().passwordhash(password!)) {
-                EasyLoading.dismiss();
-                MaterialPageRoute route = MaterialPageRoute(builder: (context) {
-                  return WebScreenHomepage(modelUser: modelUser);
-                });
-                EasyLoading.dismiss();
-                // ignore: use_build_context_synchronously
-                Navigator.pushAndRemoveUntil(context, route, (route) => false);
-                
-              } else {
-                EasyLoading.showError('ชื่อผู้ใช้งาน หรือ รหัสผ่าน ไม่ถูกต้อง');
-              }
-            } catch (e) {
-              print(e);
+          try {
+            EasyLoading.show(status: 'loading...');
+            final modelUser = await ApiLogin().login(username!, password!);
+            EasyLoading.dismiss();
+            if (modelUser.respMsg!.userPassword ==
+                MyObject().passwordhash(password!)) {
+              final route = MaterialPageRoute(builder: (context) {
+                return WebScreenHomepage(modelUser: modelUser);
+              });
+              Navigator.pushAndRemoveUntil(context, route, (route) => false);
+            } else {
               EasyLoading.showError('ชื่อผู้ใช้งาน หรือ รหัสผ่าน ไม่ถูกต้อง');
             }
+          } on TimeoutException catch (_) {
+            EasyLoading.showError('การเชื่อมต่อหมดเวลา');
+          } on Exception catch (e) {
+            print(e);
+            EasyLoading.showError('ไม่สามารถเข้าสู่ระบบได้');
+          } finally {
+            EasyLoading.dismiss();
           }
         },
         child: Text(

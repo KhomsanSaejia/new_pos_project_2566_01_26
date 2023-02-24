@@ -4,10 +4,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../model/model_dispenser_status.dart';
+import '../model/model_products.dart';
 import '../model/model_sale_now.dart';
 
 class ApiSale {
-  String staticurl = "innoligent1.ddns.net:24004";
+  // String staticurl = "innoligent1.ddns.net:24004";
+  String staticurl = "192.168.1.45:8088";
   String verapi = "/v1";
   Map<String, String> headers = {
     "Access-Control-Allow-Origin": "*",
@@ -18,8 +20,48 @@ class ApiSale {
   };
 
   Future<List<ModelDispenserStatus>> getDispenserStatus() async {
-    List<ModelDispenserStatus> modelDispenserStatusS = [];
-    var url = Uri.http(staticurl, '$verapi/dispenser/status');
+    final url = Uri.http(staticurl, '$verapi/dispenser/status');
+    final response = await http.get(url, headers: headers).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        throw TimeoutException('The connection timed out');
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load dispenser status');
+    }
+
+    final jsonList = jsonDecode(utf8.decode(response.bodyBytes)) as List;
+    final modelDispenserStatusS =
+        jsonList.map((json) => ModelDispenserStatus.fromJson(json)).toList();
+
+    return modelDispenserStatusS;
+  }
+
+  Future<List<ModelSaleNow>> getAllTransactionNow() async {
+    final url = Uri.http(staticurl, '$verapi/transaction/now');
+    final response = await http.get(url, headers: headers).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        throw TimeoutException('The connection timed out');
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load data');
+    }
+
+    final List<dynamic> data = json.decode(response.body);
+    final List<ModelSaleNow> modelSaleNows =
+        data.map((item) => ModelSaleNow.fromJson(item)).toList();
+
+    return modelSaleNows;
+  }
+
+  Future<List<ModelProducts>> getProductsNonOil() async {
+    List<ModelProducts> modelProducts = [];
+    var url = Uri.http(staticurl, '$verapi/getproduct', {"product_type":"NON-OIL"});
 
     try {
       var response = await http.get(url, headers: headers).timeout(
@@ -31,37 +73,16 @@ class ApiSale {
       if (response.statusCode == 200) {
         List<dynamic> listDynamic = jsonDecode(utf8.decode(response.bodyBytes));
         for (var element in listDynamic) {
-          ModelDispenserStatus modelDispenserStatus =
-              ModelDispenserStatus.fromJson(element);
-          modelDispenserStatusS.add(modelDispenserStatus);
+          ModelProducts modelProduct = ModelProducts.fromJson(element);
+          modelProducts.add(modelProduct);
         }
-        return modelDispenserStatusS;
       }
+      return modelProducts;
     } catch (e) {
-      print('Error occurred: $e');
+      return modelProducts;
     }
-    return modelDispenserStatusS;
+    
   }
-
-  Future<List<ModelSaleNow>> getAllTransactionNow() async {
-  final url = Uri.http(staticurl, '$verapi/transaction/now');
-  final response = await http.get(url, headers: headers).timeout(
-    const Duration(seconds: 5),
-    onTimeout: () {
-      throw TimeoutException('The connection timed out');
-    },
-  );
-
-  if (response.statusCode != 200) {
-    throw Exception('Failed to load data');
-  }
-
-  final List<dynamic> data = json.decode(response.body);
-  final List<ModelSaleNow> modelSaleNows = data.map((item) => ModelSaleNow.fromJson(item)).toList();
-
-  return modelSaleNows;
-}
-
 
   ApiSale();
 }

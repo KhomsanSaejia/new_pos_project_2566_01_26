@@ -1,4 +1,5 @@
 class ModelSaleNow {
+  int? id;
   int? dispenserId;
   int? dispenserNozzle;
   double? displayAmount;
@@ -8,10 +9,11 @@ class ModelSaleNow {
   int? saleSelect;
   int? saleRecal;
   String? productCode;
-  String? productDescription;
+  String? productShort;
 
   ModelSaleNow(
-      {this.dispenserId,
+      {this.id,
+      this.dispenserId,
       this.dispenserNozzle,
       this.displayAmount,
       this.displayVolume,
@@ -20,9 +22,10 @@ class ModelSaleNow {
       this.saleSelect,
       this.saleRecal,
       this.productCode,
-      this.productDescription});
+      this.productShort});
 
   ModelSaleNow.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     dispenserId = json['dispenser_id'];
     dispenserNozzle = json['dispenser_nozzle'];
     displayAmount = json['display_amount'];
@@ -32,11 +35,12 @@ class ModelSaleNow {
     saleSelect = json['sale_select'];
     saleRecal = json['sale_recal'];
     productCode = json['product_code'];
-    productDescription = json['product_description'];
+    productShort = json['product_short'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['dispenser_id'] = this.dispenserId;
     data['dispenser_nozzle'] = this.dispenserNozzle;
     data['display_amount'] = this.displayAmount;
@@ -46,7 +50,7 @@ class ModelSaleNow {
     data['sale_select'] = this.saleSelect;
     data['sale_recal'] = this.saleRecal;
     data['product_code'] = this.productCode;
-    data['product_description'] = this.productDescription;
+    data['product_short'] = this.productShort;
     return data;
   }
 }

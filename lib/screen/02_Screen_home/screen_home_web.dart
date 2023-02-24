@@ -79,21 +79,119 @@ class _WebScreenHomepageState extends State<WebScreenHomepage> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color(0xff343a40),
           centerTitle: true,
           title: Text(
             "$nameAppbar",
             style: GoogleFonts.sarabun(fontSize: 20),
           ),
           actions: [
-            Center(
-              child: Text(
-                  "ผู้ใช้งาน : ${widget.modelUser.respMsg!.userFirstname} ${widget.modelUser.respMsg!.userLastname} | ",
-                  style: GoogleFonts.sarabun(fontSize: 20)),
-            ),
-            Center(
-              child: Text("ตำแหน่ง : ${widget.modelUser.respMsg!.userPosition}",
-                  style: GoogleFonts.sarabun(fontSize: 20)),
-            ),
+            nameAppbar != "รายการขาย"
+                ? Center(
+                    child: Text(
+                        "ผู้ใช้งาน : ${widget.modelUser.respMsg!.userFirstname} ${widget.modelUser.respMsg!.userLastname} ",
+                        style: GoogleFonts.sarabun(fontSize: 20)),
+                  )
+                : Center(
+                    child: Row(
+                      children: [
+                        Text(
+                          "ข้อมูลหัวจ่าย",
+                          style: GoogleFonts.sarabun(fontSize: 20),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Color(0xffa0a6ab),
+                                  Color(0xff6c757d),
+                                ]),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          ": วางมือจ่าย",
+                          style: GoogleFonts.sarabun(fontSize: 20),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Color(0xfffeac67), Color(0xfffd7e14)]),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          ": ยกมือจ่าย",
+                          style: GoogleFonts.sarabun(fontSize: 20),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Color(0xffffd75f), Color(0xffffc107)]),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          ": กำลังเติม",
+                          style: GoogleFonts.sarabun(fontSize: 20),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Container(
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Color(0xffa285d7), Color(0xff6f42c1)]),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          ": เติมเสร็จ",
+                          style: GoogleFonts.sarabun(fontSize: 20),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                      ],
+                    ),
+                  ),
             IconButton(
               onPressed: () async {
                 MyObject()

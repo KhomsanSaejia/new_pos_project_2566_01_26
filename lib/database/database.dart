@@ -2,22 +2,17 @@ import 'package:mysql_client/mysql_client.dart';
 
 class Database {
   Future<void> databslogin(String username) async {
-  print("Connecting to mysql server...");
 
   // create connection
   final conn = await MySQLConnection.createConnection(
-    host: "141.18.15.55",
-    port: 3306,
-    userName: "root",
+    host: "innoligent1.ddns.net",
+    port: 24002,
+    userName: "innoligent_au",
     password: "1111",
     databaseName: "pos_db", // optional
   );
 
   await conn.connect();
-
-  print("Connected");
-
-  // update some rows
   var result = await conn.execute("SELEC * FROM user WHERE user_username = :username",{"username": username},);
 
 

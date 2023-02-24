@@ -2,15 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:new_pos_project_2566_01_26/model/model_dispenser_status.dart';
 import 'package:new_pos_project_2566_01_26/model/model_getmeter.dart';
 import 'package:new_pos_project_2566_01_26/model/model_products.dart';
 import 'package:new_pos_project_2566_01_26/model/model_shift.dart';
 import 'package:new_pos_project_2566_01_26/model/model_shift_meter.dart';
-import 'package:new_pos_project_2566_01_26/utility/style.dart';
 
 class API {
-  String staticurl = "innoligent1.ddns.net:24004";
+  // String staticurl = "innoligent1.ddns.net:24004";
+  String staticurl = "192.168.1.45:8088";
   String verapi = "/v1";
   Map<String, String> headers = {
     "Access-Control-Allow-Origin": "*",
@@ -20,26 +19,7 @@ class API {
     "content-type": "application/json"
   };
 
-  Future<String> login(String username, String password) async {
-    var url = Uri.http(staticurl, '$verapi/login',
-        {"username": username, "password": MyObject().passwordhash(password)});
-    var response = await http.get(url, headers: headers).timeout(
-      const Duration(seconds: 5),
-      onTimeout: () {
-        return http.Response('Timeout', 408);
-      },
-    );
-    if (response.statusCode == 200) {
-      Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
-      if (data["status"] == true && data["resp_code"] == 200) {
-        return utf8.decode(response.bodyBytes);
-      } else {
-        return utf8.decode(response.bodyBytes);
-      }
-    } else {
-      return "null";
-    }
-  }
+  
 
   Future<String> getDayOpen() async {
     var url = Uri.http(staticurl, '$verapi/day');
@@ -130,14 +110,14 @@ class API {
       }
       return modelgetmeters;
     } catch (e) {
-      print('Error occurred: $e');
+      return modelgetmeters;
     }
-    return modelgetmeters;
+    
   }
 
   Future<List<ModelProducts>> getProducts() async {
     List<ModelProducts> modelProducts = [];
-    var url = Uri.http(staticurl, '$verapi/getproduct/all');
+    var url = Uri.http(staticurl, '$verapi/getproduct', {"product_type":"ALL"});
 
     try {
       var response = await http.get(url, headers: headers).timeout(
@@ -155,9 +135,9 @@ class API {
       }
       return modelProducts;
     } catch (e) {
-      print('Error occurred: $e');
+      return modelProducts;
     }
-    return modelProducts;
+    
   }
 
   Future<String> postOpenShift(String data) async {
@@ -175,9 +155,9 @@ class API {
           jsonDecode(utf8.decode(response.bodyBytes));
       return dataReturn["resp_msg"];
     } catch (e) {
-      print('Error occurred: $e');
+      return "null";
     }
-    return "null";
+    
   }
 
   

@@ -84,8 +84,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
   }
 
   Future<void> getshiftdetail(String date) async {
-    ModelShift _modelShift =
-        await API().getDayOpenByDate(date);
+    ModelShift _modelShift = await API().getDayOpenByDate(date);
     setState(() {
       modelShift = _modelShift;
       tbAccountDate.text = _modelShift.dayAccountdate!;
@@ -129,7 +128,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 131, 190, 255),
+      backgroundColor: const Color(0xff454d55),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -216,7 +215,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
           child: Text(
             "วันที่ทางบัญชี",
             textAlign: TextAlign.right,
-            style: GoogleFonts.sarabun(fontSize: 18, color: Colors.black),
+            style: GoogleFonts.sarabun(fontSize: 18, color: Colors.white),
           ),
         ),
         Padding(
@@ -258,7 +257,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
           child: Text(
             "แคชเชียร์",
             textAlign: TextAlign.right,
-            style: GoogleFonts.sarabun(fontSize: 18, color: Colors.black),
+            style: GoogleFonts.sarabun(fontSize: 18, color: Colors.white),
           ),
         ),
         Padding(
@@ -300,7 +299,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
           child: Text(
             "เงินทอน",
             textAlign: TextAlign.right,
-            style: GoogleFonts.sarabun(fontSize: 18, color: Colors.black),
+            style: GoogleFonts.sarabun(fontSize: 18, color: Colors.white),
           ),
         ),
         Padding(
@@ -346,7 +345,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
           child: Text(
             "เวลาเริ่มกะ",
             textAlign: TextAlign.right,
-            style: GoogleFonts.sarabun(fontSize: 18, color: Colors.black),
+            style: GoogleFonts.sarabun(fontSize: 18, color: Colors.white),
           ),
         ),
         Padding(
@@ -388,7 +387,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
           child: Text(
             "หมายเลขกะ",
             textAlign: TextAlign.right,
-            style: GoogleFonts.sarabun(fontSize: 18, color: Colors.black),
+            style: GoogleFonts.sarabun(fontSize: 18, color: Colors.white),
           ),
         ),
         Padding(
@@ -433,10 +432,13 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
               width: MediaQuery.of(context).size.width,
               // color: Colors.red,
               alignment: Alignment.centerLeft,
-              child: Text(
-                "มิเตอร์ ก่อนขาย - หลังขาย",
-                style: GoogleFonts.sarabun(
-                  fontSize: 20,
+              child: Center(
+                child: Text(
+                  "มิเตอร์ ก่อนขาย - หลังขาย",
+                  style: GoogleFonts.sarabun(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
@@ -486,10 +488,13 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
                 height: MediaQuery.of(context).size.height * 0.05,
                 width: MediaQuery.of(context).size.width,
                 alignment: Alignment.centerLeft,
-                child: Text(
-                  "ราคาสินค้า",
-                  style: GoogleFonts.sarabun(
-                    fontSize: 20,
+                child: Center(
+                  child: Text(
+                    "ราคาสินค้า",
+                    style: GoogleFonts.sarabun(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
@@ -533,8 +538,8 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFF6c757d),
-                Color(0xFF424949),
+                Color(0xffa0a6ab),
+                Color(0xff6c757d),
               ],
             ),
             // color: const Color(0xFF6c757d),
@@ -545,7 +550,10 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
         alignment: Alignment.center,
         child: Text(
           header,
-          style: GoogleFonts.sarabun(fontSize: 20, color: Colors.white),
+          style: GoogleFonts.sarabun(
+            fontSize: 20,
+            color: Colors.white,
+          ),
         ),
       ),
     );
@@ -692,11 +700,7 @@ class _WebScreenOpenCloseShiftState extends State<WebScreenOpenCloseShift> {
               return Row(
                 children: [
                   rowbody(context, 10, 0, (i + 1).toString(), Alignment.center),
-                  rowbody(
-                      context,
-                      0,
-                      0,
-                      modelProducts[i].productDescription!.toString(),
+                  rowbody(context, 0, 0, modelProducts[i].productShort!,
                       Alignment.centerLeft),
                   rowbody(
                       context,
