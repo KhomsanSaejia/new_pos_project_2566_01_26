@@ -61,7 +61,8 @@ class ApiSale {
 
   Future<List<ModelProducts>> getProductsNonOil() async {
     List<ModelProducts> modelProducts = [];
-    var url = Uri.http(staticurl, '$verapi/getproduct', {"product_type":"NON-OIL"});
+    var url =
+        Uri.http(staticurl, '$verapi/getproduct', {"product_type": "NON-OIL"});
 
     try {
       var response = await http.get(url, headers: headers).timeout(
@@ -81,7 +82,22 @@ class ApiSale {
     } catch (e) {
       return modelProducts;
     }
-    
+  }
+
+  Future<void> updateTranSactionSelect(int id, int status) async {
+    var url = Uri.http(staticurl, '$verapi/transaction/select');
+
+    final msg = jsonEncode({
+      'id': id,
+      'status': status,
+    });
+
+    await http.post(url, headers: headers, body: msg).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        throw TimeoutException('The connection timed out');
+      },
+    );
   }
 
   ApiSale();

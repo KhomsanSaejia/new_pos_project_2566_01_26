@@ -106,7 +106,7 @@ class _WebScreenHomepageState extends State<WebScreenHomepage> {
                           width: 30,
                           height: 30,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(5),
                             gradient: const LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
@@ -130,7 +130,7 @@ class _WebScreenHomepageState extends State<WebScreenHomepage> {
                           width: 30,
                           height: 30,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(5),
                             gradient: const LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
@@ -151,7 +151,7 @@ class _WebScreenHomepageState extends State<WebScreenHomepage> {
                           width: 30,
                           height: 30,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(5),
                             gradient: const LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
@@ -172,7 +172,7 @@ class _WebScreenHomepageState extends State<WebScreenHomepage> {
                           width: 30,
                           height: 30,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(5),
                             gradient: const LinearGradient(
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
@@ -204,14 +204,14 @@ class _WebScreenHomepageState extends State<WebScreenHomepage> {
             ),
           ],
         ),
-        drawer: showDrawer(),
+        drawer: showDrawer(context),
         // body: boolDay ? True : False,
         body: currentWidget,
       ),
     );
   }
 
-  Widget showDrawer() {
+  Widget showDrawer(BuildContext context) {
     return Drawer(
       backgroundColor: const Color(0xFF343a40),
       child: ListView(
@@ -219,20 +219,20 @@ class _WebScreenHomepageState extends State<WebScreenHomepage> {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              menuDrawer("เปิด/ปิด กะ"),
-              menuDrawer("รายการขาย"),
-              menuDrawer("พิมพ์/ยกเลิก ใบเสร็จรับเงิน"),
-              menuDrawer("พิมพ์/ยกเลิก ใบกำกับภาษี"),
-              menuDrawer("เบิก/ทดสอบน้ำมัน"),
-              menuDrawer("สินค้า"),
-              menuDrawer("เซฟดรอป"),
-              menuDrawer("ผู้ใช้งานระบบ"),
-              menuDrawer("ประวัติการขาย"),
-              menuDrawer("อ่านมิเตอร์"),
-              menuDrawer("การขายแบบใบเนอราคา"),
-              menuDrawer("ดึงเลขมิเตอร์ตั้งต้น"),
-              menuDrawer("เลือกธีมสี"),
-              // menuDrawer("ออกจากระบบ")
+              menuDrawer(context, "เปิด/ปิด กะ"),
+              menuDrawer(context, "รายการขาย"),
+              menuDrawer(context, "พิมพ์/ยกเลิก ใบเสร็จรับเงิน"),
+              menuDrawer(context, "พิมพ์/ยกเลิก ใบกำกับภาษี"),
+              menuDrawer(context, "เบิก/ทดสอบน้ำมัน"),
+              menuDrawer(context, "สินค้า"),
+              menuDrawer(context, "เซฟดรอป"),
+              menuDrawer(context, "ผู้ใช้งานระบบ"),
+              menuDrawer(context, "ประวัติการขาย"),
+              menuDrawer(context, "อ่านมิเตอร์"),
+              menuDrawer(context, "การขายแบบใบเนอราคา"),
+              menuDrawer(context, "ดึงเลขมิเตอร์ตั้งต้น"),
+              menuDrawer(context, "เลือกธีมสี"),
+              // menuDrawer(context,"ออกจากระบบ")
             ],
           )
         ],
@@ -240,7 +240,7 @@ class _WebScreenHomepageState extends State<WebScreenHomepage> {
     );
   }
 
-  Widget menuDrawer(String menu) {
+  Widget menuDrawer(BuildContext context, String menu) {
     return ListTile(
       hoverColor: const Color(0xFF5a5a5a),
       selectedColor: const Color(0xFFebecec),
