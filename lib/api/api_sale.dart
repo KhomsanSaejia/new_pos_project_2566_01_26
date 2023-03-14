@@ -9,7 +9,8 @@ import '../model/model_sale_now.dart';
 
 class ApiSale {
   // String staticurl = "innoligent1.ddns.net:24004";
-  String staticurl = "192.168.1.45:8088";
+  // String staticurl = "192.168.1.45:8088";
+  String staticurl = "192.168.1.94:35542";
   String verapi = "/v1";
   Map<String, String> headers = {
     "Access-Control-Allow-Origin": "*",

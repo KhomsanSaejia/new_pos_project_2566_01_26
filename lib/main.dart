@@ -26,7 +26,7 @@ class Myapp extends StatelessWidget {
       title: 'Pump Smart Pos',
       home: const ScreenLogin(),
       builder: EasyLoading.init(),
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

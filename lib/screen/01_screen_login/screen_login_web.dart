@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:new_pos_project_2566_01_26/api/api_login.dart';
+import 'package:new_pos_project_2566_01_26/model/model_user.dart';
 import 'package:new_pos_project_2566_01_26/screen/02_Screen_home/screen_home_web.dart';
 import '../../utility/style.dart';
 
@@ -53,8 +54,6 @@ class _WebScreenLoginState extends State<WebScreenLogin> {
       ),
     );
   }
-
-
 
   Widget formlogin() {
     return SizedBox(
@@ -179,7 +178,7 @@ class _WebScreenLoginState extends State<WebScreenLogin> {
         onPressed: () async {
           try {
             EasyLoading.show(status: 'loading...');
-            final modelUser = await ApiLogin().login(username!, password!);
+            ModelUser modelUser = await ApiLogin().login(username!, password!);
             EasyLoading.dismiss();
             if (modelUser.respMsg!.userPassword ==
                 MyObject().passwordhash(password!)) {
@@ -190,7 +189,8 @@ class _WebScreenLoginState extends State<WebScreenLogin> {
             } else {
               EasyLoading.showError('ชื่อผู้ใช้งาน หรือ รหัสผ่าน ไม่ถูกต้อง');
             }
-          } on TimeoutException catch (_) {
+          } on TimeoutException catch (e) {
+            print(e);
             EasyLoading.showError('การเชื่อมต่อหมดเวลา');
           } on Exception catch (e) {
             print(e);

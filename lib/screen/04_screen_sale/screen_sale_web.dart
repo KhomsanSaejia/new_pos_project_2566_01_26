@@ -415,81 +415,79 @@ class _WebScreenSaleState extends State<WebScreenSale> {
             ),
           ],
           color: Colors.white),
-      child: Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
-              width: MediaQuery.of(context).size.width * 0.7,
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "ข้อมูลสินค้า",
-                style: GoogleFonts.sarabun(fontSize: 20, color: Colors.black),
-              ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+            width: MediaQuery.of(context).size.width * 0.7,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "ข้อมูลสินค้า",
+              style: GoogleFonts.sarabun(fontSize: 20, color: Colors.black),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.7,
-              height: MediaQuery.of(context).size.height * 0.1,
-              child: modelProductsS.isEmpty
-                  ? ListView.builder(
-                      shrinkWrap: true,
-                      controller: ScrollController(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 8,
-                      itemBuilder: ((context, index) {
-                        return menuNonOilNodata();
-                      }))
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      controller: ScrollController(),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: modelProductsS.length,
-                      itemBuilder: ((context, index) {
-                        return InkWell(
-                            onTap: () {
-                              Map<String, dynamic> select = {
-                                "product_code":
-                                    modelProductsS[index].productCode,
-                                "product_short":
-                                    modelProductsS[index].productShort,
-                                "product_volume": 1.0,
-                                "product_amount":
-                                    modelProductsS[index].productPrice!
-                              };
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: modelProductsS.isEmpty
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    controller: ScrollController(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 8,
+                    itemBuilder: (context, index) {
+                      return menuNonOilNodata();
+                    })
+                : ListView.builder(
+                    shrinkWrap: true,
+                    controller: ScrollController(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: modelProductsS.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          Map<String, dynamic> select = {
+                            "product_code": modelProductsS[index].productCode,
+                            "product_short": modelProductsS[index].productShort,
+                            "product_volume": 1.0,
+                            "product_amount":
+                                modelProductsS[index].productPrice!
+                          };
 
-                              if (saleSelects.isEmpty) {
+                          if (saleSelects.isEmpty) {
+                            setState(() {
+                              saleSelects.add(select);
+                            });
+                          } else {
+                            bool dupitem = false;
+                            for (Map<String, dynamic> saleSelect
+                                in saleSelects) {
+                              if (saleSelect["product_code"] ==
+                                  select["product_code"]) {
                                 setState(() {
-                                  saleSelects.add(select);
+                                  saleSelect["product_volume"] +=
+                                      select["product_volume"];
+                                  saleSelect["product_amount"] +=
+                                      select["product_amount"];
                                 });
-                              } else {
-                                bool dupitem = false;
-                                for (Map<String, dynamic> saleSelect
-                                    in saleSelects) {
-                                  if (saleSelect["product_code"] ==
-                                      select["product_code"]) {
-                                    setState(() {
-                                      saleSelect["product_volume"] +=
-                                          select["product_volume"];
-                                      saleSelect["product_amount"] +=
-                                          select["product_amount"];
-                                    });
-                                    dupitem = true;
-                                    break;
-                                  }
-                                }
-                                if (dupitem == false) {
-                                  setState(() {
-                                    saleSelects.add(select);
-                                  });
-                                } else {}
+                                dupitem = true;
+                                break;
                               }
-                            },
-                            child: menuNonOilHaveData(modelProductsS[index]));
-                      })),
-            ),
-          ],
-        ),
+                            }
+                            if (dupitem == false) {
+                              setState(() {
+                                saleSelects.add(select);
+                              });
+                            } else {}
+                          }
+                        },
+                        child: menuNonOilHaveData(modelProductsS[index]),
+                      );
+                      // return menuNonOilHaveData(modelProductsS[index]);
+                    }),
+          ),
+        ],
       ),
     );
   }
@@ -1005,28 +1003,392 @@ class _WebScreenSaleState extends State<WebScreenSale> {
               ),
             ],
           ),
-          child: Column(children: [
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
             menuPaymentType(context),
             menuTextAmount(context),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(5),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  color: Colors.blue,
+            groupbuttonNum(context),
+            groupbuttonPrintslip(context),
+          ]),
+        ),
+      ),
+    );
+  }
+
+  Widget groupbuttonNum(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: SizedBox(
+        height: size.height * 0.34,
+        width: size.width * 0.3,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            groupbuttonRow1(size),
+            const SizedBox(
+              height: 5,
+            ),
+            groupbuttonRow2(size),
+            const SizedBox(
+              height: 5,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: size.width * 0.215,
+                  height: size.height * 0.166,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      groupbuttonRow3(size),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      groupbuttonRow4(size),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(
+                      size.width * 0.07,
+                      size.height * 0.166,
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    "Enter",
+                    style: GoogleFonts.sarabun(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget groupbuttonRow1(Size size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "7",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "8",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "9",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: const Icon(
+            Icons.backspace,
+            size: 20,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget groupbuttonRow2(Size size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "4",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "5",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "6",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "Delete",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget groupbuttonRow3(Size size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "1",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "2",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "3",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget groupbuttonRow4(Size size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "0",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            ".",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        // SizedBox(
+        //   width: size.width * 0.07,
+        //   height: size.height * 0.08,
+        // )
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey,
+            fixedSize: Size(
+              size.width * 0.07,
+              size.height * 0.08,
+            ),
+          ),
+          onPressed: () {},
+          child: Text(
+            "จำนวน",
+            style: GoogleFonts.sarabun(
+              fontSize: 20,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget groupbuttonPrintslip(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: SizedBox(
+        height: size.height * 0.15,
+        width: size.width * 0.3,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff6c757d),
+                  fixedSize: Size(size.width * 0.14, size.height * 0.15)),
+              onPressed: () {},
+              child: Text(
+                "ชำระเงิน",
+                style: GoogleFonts.sarabun(
+                  fontSize: 30,
+                  color: Colors.white,
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.2,
-                width: MediaQuery.of(context).size.width * 0.3,
-                color: Colors.purple,
-              ),
-            ),
-          ]),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xffffc107),
+                      fixedSize: Size(size.width * 0.14, size.height * 0.07)),
+                  onPressed: () {},
+                  child: Text(
+                    "พิมพ์ใบเสร็จซ้ำ",
+                    style: GoogleFonts.sarabun(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff17a2b8),
+                      fixedSize: Size(size.width * 0.14, size.height * 0.07)),
+                  onPressed: () {},
+                  child: Text(
+                    "พิมพ์ใบกำกับภาษี",
+                    style: GoogleFonts.sarabun(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
         ),
       ),
     );
